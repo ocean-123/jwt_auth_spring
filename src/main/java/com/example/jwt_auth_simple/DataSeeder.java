@@ -15,7 +15,7 @@ import java.util.List;
 public class DataSeeder implements CommandLineRunner {
 
     @Autowired
-    private  ClientRepo clientRepo;
+    private  ClientService clientService;
     @Override
     public void run(String... args) throws Exception {
         Client user1 = new Client();
@@ -28,7 +28,7 @@ public class DataSeeder implements CommandLineRunner {
         user2.setPassword("password2");
         user2.setEmail("user2@example.com");
 
-        clientRepo.saveAll(Arrays.asList(user1, user2));
+        clientService.saveRegister((Client) Arrays.asList(user1, user2));
     }
 }
 

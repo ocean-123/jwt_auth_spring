@@ -1,39 +1,38 @@
 package com.example.jwt_auth_simple.config;
 
 
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.util.Properties;
 
 @EnableWebSecurity
 @Configuration
-@EnableTransactionManagement
+//@ImportResource("classpath:application.properties")
 
 public class SecurityConfig {
 
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactoryBean(){
-        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
-        localSessionFactoryBean.setPackagesToScan("com.example.jwt_auth_simple.entity.Client");
-        return localSessionFactoryBean;
 
-    }
+
+    // security config
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
 
 
@@ -62,7 +61,12 @@ public class SecurityConfig {
                                 .requestMatchers("/**")
                                 .permitAll())
                 .formLogin(form->
-                        form.loginPage("/signin").defaultSuccessUrl("userLogin").successHandler("success").permitAll());
+                        form.loginPage("/signin")
+//                                .defaultSuccessUrl("/userLogin")
+//                                .successHandler(authSuccessHandler)
+//                                .permitAll()
+                                )
+        ;
         return http.build();
  }
 
